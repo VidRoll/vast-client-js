@@ -356,20 +356,22 @@ VASTClient = (function() {
       options = {};
     }
     options = extend(this.options, opts);
-    if (this.totalCallsTimeout < now) {
-      this.totalCalls = 1;
-      this.totalCallsTimeout = now + (60 * 60 * 1000);
-    } else {
-      this.totalCalls++;
-    }
-    if (this.cappingFreeLunch >= this.totalCalls) {
-      cb(null);
-      return;
-    }
-    if (now - this.lastSuccessfullAd < this.cappingMinimumTimeInterval) {
-      cb(null);
-      return;
-    }
+
+    /*
+    if @totalCallsTimeout < now
+        @totalCalls = 1
+        @totalCallsTimeout = now + (60 * 60 * 1000)
+    else
+        @totalCalls++
+    
+    if @cappingFreeLunch >= @totalCalls
+        cb(null)
+        return
+    
+    if now - @lastSuccessfullAd < @cappingMinimumTimeInterval
+        cb(null)
+        return
+     */
     return VASTParser.parse(url, options, (function(_this) {
       return function(response) {
         return cb(response);
@@ -618,7 +620,7 @@ VASTParser = (function() {
     }
     parentURLs.push(url);
     return URLHandler.get(url, options, (function(_this) {
-      return function(err, xml) {
+      return function(err, xml, text) {
         var ad, complete, loopIndex, node, response, _j, _k, _len1, _len2, _ref, _ref1;
         if (err != null) {
           return cb(err);
@@ -671,6 +673,7 @@ VASTParser = (function() {
             }
             response = null;
           }
+          response.responseText = text;
           return cb(null, response);
         };
         loopIndex = response.ads.length;
@@ -1383,7 +1386,7 @@ XHRURLHandler = (function() {
       xhr.send();
       return xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
-          return cb(null, xhr.responseXML);
+          return cb(null, xhr.responseXML, xhr.responseText + '');
         }
       };
     } catch (_error) {

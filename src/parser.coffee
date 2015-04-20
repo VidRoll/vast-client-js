@@ -51,7 +51,7 @@ class VASTParser
         parentURLs.push url
 
         
-        URLHandler.get url, options, (err, xml) =>
+        URLHandler.get url, options, (err, xml, text) =>
             return cb(err) if err?
 
             response = new VASTResponse()
@@ -83,6 +83,8 @@ class VASTParser
                     # If an [ERRORCODE] macro is included, the video player should substitute with error code 303.
                     @track(response.errorURLTemplates, ERRORCODE: 303) unless errorAlreadyRaised
                     response = null
+                
+                response.responseText = text;
                 cb(null, response)
 
             loopIndex = response.ads.length

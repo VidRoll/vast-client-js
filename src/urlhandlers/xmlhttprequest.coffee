@@ -17,7 +17,7 @@ class XHRURLHandler
             xhr.send()
             xhr.onreadystatechange = ->
                 if xhr.readyState == 4
-                    cb(null, xhr.responseXML)
+                    cb(null, xhr.responseXML, xhr.responseText+'')
         catch
             cb()
 

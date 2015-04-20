@@ -25,6 +25,7 @@ class VASTClient
         # Check totalCallsTimeout (first call + 1 hour), if older than now,
         # reset totalCalls number, by this way the client will be eligible again
         # for freelunch capping
+        ###
         if @totalCallsTimeout < now
             @totalCalls = 1
             @totalCallsTimeout = now + (60 * 60 * 1000)
@@ -38,6 +39,7 @@ class VASTClient
         if now - @lastSuccessfullAd < @cappingMinimumTimeInterval
             cb(null)
             return
+        ###
 
         VASTParser.parse url, options, (response) =>
             cb(response)
