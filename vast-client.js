@@ -310,6 +310,7 @@ VASTAd = (function() {
     this.errorURLTemplates = [];
     this.impressionURLTemplates = [];
     this.creatives = [];
+    this.extensions = {};
   }
 
   return VASTAd;
@@ -673,7 +674,9 @@ VASTParser = (function() {
             }
             response = null;
           }
-          response.responseText = text;
+          if (response != null) {
+            response.responseText = text;
+          }
           return cb(null, response);
         };
         loopIndex = response.ads.length;
@@ -828,7 +831,7 @@ VASTParser = (function() {
   };
 
   VASTParser.parseInLineElement = function(inLineElement) {
-    var ad, creative, creativeElement, creativeTypeElement, node, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2;
+    var ad, creative, creativeElement, creativeTypeElement, extensionElement, extensionNode, name, node, obj, param, type, _base, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _len5, _m, _n, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
     ad = new VASTAd();
     _ref = inLineElement.childNodes;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -864,6 +867,34 @@ VASTParser = (function() {
                     ad.creatives.push(creative);
                   }
               }
+            }
+          }
+          break;
+        case "Extensions":
+          _ref3 = this.childsByName(node, "Extension");
+          for (_l = 0, _len3 = _ref3.length; _l < _len3; _l++) {
+            extensionElement = _ref3[_l];
+            type = extensionElement.getAttribute("type");
+            if (!type) {
+              continue;
+            }
+            if ((_base = ad.extensions)[type] == null) {
+              _base[type] = [];
+            }
+            _ref4 = extensionElement.childNodes;
+            for (_m = 0, _len4 = _ref4.length; _m < _len4; _m++) {
+              extensionNode = _ref4[_m];
+              name = extensionNode.nodeName;
+              obj = {};
+              obj.name = name;
+              _ref5 = extensionNode.attributes;
+              for (_n = 0, _len5 = _ref5.length; _n < _len5; _n++) {
+                param = _ref5[_n];
+                if (param.specified != null) {
+                  obj[param.name] = param.value;
+                }
+              }
+              ad.extensions[type].push(obj);
             }
           }
       }

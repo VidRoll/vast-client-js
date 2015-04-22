@@ -84,7 +84,8 @@ class VASTParser
                     @track(response.errorURLTemplates, ERRORCODE: 303) unless errorAlreadyRaised
                     response = null
                 
-                response.responseText = text;
+                if response?
+                    response.responseText = text;
                 cb(null, response)
 
             loopIndex = response.ads.length
@@ -215,7 +216,20 @@ class VASTParser
                                     creative = @parseCompanionAd creativeTypeElement
                                     if creative
                                         ad.creatives.push creative
-
+                when "Extensions"
+                    for extensionElement in @childsByName(node, "Extension")
+                        type = extensionElement.getAttribute("type");
+                        if !type
+                            continue
+                        ad.extensions[type] ?= []
+                        for extensionNode in extensionElement.childNodes
+                            name = extensionNode.nodeName
+                            obj = {}
+                            obj.name = name;
+                            for param in extensionNode.attributes
+                                if param.specified? 
+                                    obj[param.name] = param.value
+                            ad.extensions[type].push(obj)
         return ad
 
     @parseCreativeLinearElement: (creativeElement) ->
