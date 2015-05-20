@@ -9,6 +9,7 @@ class VASTCreativeLinear extends VASTCreative
         @duration = 0
         @skipDelay = null
         @mediaFiles = []
+        @adParameters = null
         @videoClickThroughURLTemplate = null
         @videoClickTrackingURLTemplates = []
 
