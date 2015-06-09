@@ -234,7 +234,7 @@ class VASTParser
 
     @parseCreativeLinearElement: (creativeElement) ->
         creative = new VASTCreativeLinear()
-
+        creative.adParameters = this.parseNodeText(this.childByName(creativeElement, "AdParameters"));
         creative.duration = @parseDuration @parseNodeText(@childByName(creativeElement, "Duration"))
         if creative.duration == -1 and creativeElement.parentNode.parentNode.parentNode.nodeName != 'Wrapper'
             return null # can't parse duration, element is required

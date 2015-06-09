@@ -455,6 +455,7 @@ VASTCreativeLinear = (function(_super) {
     this.duration = 0;
     this.skipDelay = null;
     this.mediaFiles = [];
+    this.adParameters = null;
     this.videoClickThroughURLTemplate = null;
     this.videoClickTrackingURLTemplates = [];
   }
@@ -905,6 +906,7 @@ VASTParser = (function() {
   VASTParser.parseCreativeLinearElement = function(creativeElement) {
     var clickTrackingElement, creative, eventName, maintainAspectRatio, mediaFile, mediaFileElement, mediaFilesElement, percent, scalable, skipOffset, trackingElement, trackingEventsElement, trackingURLTemplate, videoClicksElement, _base, _i, _j, _k, _l, _len, _len1, _len2, _len3, _len4, _m, _ref, _ref1, _ref2, _ref3, _ref4;
     creative = new VASTCreativeLinear();
+    creative.adParameters = this.parseNodeText(this.childByName(creativeElement, "AdParameters"));
     creative.duration = this.parseDuration(this.parseNodeText(this.childByName(creativeElement, "Duration")));
     if (creative.duration === -1 && creativeElement.parentNode.parentNode.parentNode.nodeName !== 'Wrapper') {
       return null;
