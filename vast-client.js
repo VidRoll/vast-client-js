@@ -888,11 +888,13 @@ VASTParser = (function() {
               name = extensionNode.nodeName;
               obj = {};
               obj.name = name;
-              _ref5 = extensionNode.attributes;
-              for (_n = 0, _len5 = _ref5.length; _n < _len5; _n++) {
-                param = _ref5[_n];
-                if (param.specified != null) {
-                  obj[param.name] = param.value;
+              if (extensionNode.attributes) {
+                _ref5 = extensionNode.attributes;
+                for (_n = 0, _len5 = _ref5.length; _n < _len5; _n++) {
+                  param = _ref5[_n];
+                  if (param.specified != null) {
+                    obj[param.name] = param.value;
+                  }
                 }
               }
               ad.extensions[type].push(obj);

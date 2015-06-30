@@ -226,9 +226,10 @@ class VASTParser
                             name = extensionNode.nodeName
                             obj = {}
                             obj.name = name;
-                            for param in extensionNode.attributes
-                                if param.specified? 
-                                    obj[param.name] = param.value
+                            if extensionNode.attributes
+                                for param in extensionNode.attributes
+                                    if param.specified? 
+                                        obj[param.name] = param.value
                             ad.extensions[type].push(obj)
         return ad
 
